@@ -42,6 +42,7 @@ declarations.
 [`PROOF-PATH.md`](PROOF-PATH.md) maps the main theorem to the definitions and
 lemmas that establish it.  [`PROOF_STATUS.md`](PROOF_STATUS.md) records the
 verification boundary and the mathematical statements covered by the build.
+For a plain-language overview, see [`ELI15.md`](ELI15.md).
 
 ## Repository layout
 
