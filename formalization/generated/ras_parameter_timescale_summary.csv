@@ -1,4 +1,0 @@
-model,kcat1,kcat2,saturation_n1=n*kcat1/kcat2,tau_target_n1_s,tau_SOS_GDP_s,tau_SOS_GTP_s,relax_per_dwell_GDP_n1,relax_per_dwell_GTP_n1,binding_ratio_coeff_GDP=konCoeff/koff,binding_ratio_coeff_GTP=konCoeff/koff
-Model1,0.01,0.0025,4.0,80.0,200.0,2000.0,2.5,25.0,1.4000000000000001e-05,0.00014000000000000001
-Model2,0.01,0.025,0.39999999999999997,28.57142857142857,200.0,2000.0,7.000000000000001,70.0,1.4000000000000001e-05,0.00014000000000000001
-Model3,0.01,0.0025,4.0,80.0,0.2,2.0,0.0025,0.025,1.3999999999999998e-05,0.00014
