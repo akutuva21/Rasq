@@ -1,0 +1,51 @@
+# ACTIVATOR-TARGET MODEL
+# Minimal two-layer cascade illustrating processivity-driven quantization.
+# Companion to Box 1 in the manuscript.
+#
+# Activator A is converted to A* at rate k1 and deactivates at rate km1.
+# Each A* catalyzes T -> T* at rate k2; T* deactivates at rate km2.
+#
+# Quantized output emerges when all four conditions are met:
+#   (1) AT * k1 / km1 ~ 1            -> low activator number, mean A* ~ 1
+#   (2) Delta = k2 * TT / km2 >> 1   -> peak spacing, here Delta = 50
+#   (3) km2 / km1 >> 1               -> timescale separation, here ratio = 50
+#   (4) n * k2 / km2 <~ 1            -> unsaturated catalysis, here 0.05*n
+
+begin model
+
+begin parameters
+    AT      10              # total activator molecules
+    TT      1000            # total target molecules
+    k1      1e-3            # activator activation rate (s^-1)
+    km1     1e-2            # activator deactivation rate (s^-1); tau_A* = 100 s
+    k2      2.5e-2          # catalytic activation rate per A* (s^-1)
+    km2     0.5             # target deactivation rate (s^-1); tau_T* ~ 2 s
+end parameters
+
+begin molecule types
+    A(act~0~1)
+    T(act~0~1)
+end molecule types
+
+begin species
+    A(act~0)    AT          # all activator initially inactive
+    T(act~0)    TT          # all target initially inactive
+end species
+
+begin observables
+    Molecules   Astar   A(act~1)
+    Molecules   Tstar   T(act~1)
+    Molecules   Atotal  A()
+    Molecules   Ttotal  T()
+end observables
+
+begin reaction rules
+    Aactivate:      A(act~0)  ->  A(act~1)                              k1
+    Adeactivate:    A(act~1)  ->  A(act~0)                              km1
+    Tactivate:      T(act~0)  +  A(act~1)  ->  T(act~1)  +  A(act~1)    k2
+    Tdeactivate:    T(act~1)  ->  T(act~0)                              km2
+end reaction rules
+
+end model
+
+simulate({method=>"ssa", t_end=>100000, n_steps=>100000, print_functions=>1})

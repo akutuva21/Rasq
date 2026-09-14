@@ -1,0 +1,48 @@
+# MODEL 2 
+
+# Ras-SOS Activation Model 2 - modified to remove positive feedback
+# altered parameters for multimodality 
+# increased Kcat2 and decreased Koff1 
+
+
+begin model
+
+begin parameters
+    RhoSOS 30             # nM # initial RhoSOS parameter for scanning
+    
+    Kon1 7e-5*RhoSOS*A           # sos binding to corral
+    
+    Koff1 5e-3            # Dissociation rate for SOS from corral
+    Kcat1 1e-2 / A        # Catalytic rate for RasGDP -> RasGTP
+    Kcat2 2.5e-2          # Catalytic rate for RasGTP -> RasGDP.  # initial Kcat2 parameter in Model 2 = 2.5e-3 
+    
+    A 4                   # Area, (µm²)
+    RasTotal 1000 * A          # Total number of Ras molecules, initially all RasGDP 
+    
+end parameters
+
+begin molecule types
+    Ras(a~p~0)        
+    Sos()             
+end molecule types
+
+begin species
+    Ras(a~0) RasTotal     # Initial RasGDP molecules
+end species
+
+begin observables
+    Molecules Sos_act Sos()
+    Molecules Ras_act Ras(a~p)
+end observables
+
+begin reaction rules
+    SosBinding:  0 <-> Sos() Kon1,Koff1
+    RasPhos:        Ras(a~0) + Sos() -> Ras(a~p) + Sos() Kcat1
+    RasDephos:      Ras(a~p) -> Ras(a~0) Kcat2
+end reaction rules
+
+end model
+
+
+simulate({method=>"ssa", t_end=>1000000, n_steps=>1000000})
+
