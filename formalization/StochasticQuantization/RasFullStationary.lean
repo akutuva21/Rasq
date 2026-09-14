@@ -47,10 +47,12 @@ theorem stationary_defect
   have hstat :
       (fastLinear p Rtot + epsilon • slowLinear p Rtot) pi = 0 := by
     simpa [fullLinear] using hstationary
-  simpa [projectLinear, correctorLinear, slowLinear] using
+  simpa [StateSpace.projectLinear, FiniteOperators.correctorLinear,
+    GlobalCorrector.correctorLinear, slowLinear] using
     StochasticQuantization.StationaryMixture.defect_identity
       (fastLinear p Rtot) (slowLinear p Rtot)
-      (projectLinear p Rtot) (correctorLinear p Rtot)
+      (StateSpace.projectLinear p Rtot)
+      (FiniteOperators.correctorLinear p Rtot)
       epsilon pi hRQ hstat
 
 /-- Pointwise form, useful for readers who do not want to read vector notation. -/

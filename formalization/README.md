@@ -3,11 +3,11 @@
 This folder adds a standalone Lean 4 formalization and numerical certificate suite
 to the original Ras activation repository.
 
-> **Archive boundary.** This ZIP contains and builds the core formalization, but
-> it does not contain the later finite-state stationary-theorem modules described
-> in Sections 11–15 below. Those sections are retained as provenance for the
-> larger development, not as claims that this checkout can currently verify. See
-> [`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md) for the exact boundary.
+> **Archive boundary.** The original ZIP omitted the later finite-state
+> stationary-theorem modules described in Sections 11–15. They have now been
+> restored from `Rasq-missing-advanced-lean-files.zip` and the complete dependency
+> chain is included in the default Lake target. See
+> [`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md) for the provenance boundary.
 
 You do **not** need to know Lean or advanced probability to understand the point.
 The biological question is:
@@ -421,11 +421,11 @@ the saved occupancy samples.
 
 ---
 
-## 11. The later exact stationary extension (not included in this ZIP)
+## 11. The exact finite stationary extension
 
-The following sections describe a later extension whose prerequisite Lean source
-files are absent from this archive. They are not part of the default `lake build`
-target and are not machine-checked here.
+The attached restoration bundle supplies the prerequisite Lean source files for
+this extension. They are part of the default `lake build` target and are
+kernel-checked in the current checkout.
 
 Now consider the whole finite stochastic Ras count process.
 
@@ -447,8 +447,7 @@ Define `P` as follows:
 Define `R` as the fast Poisson corrector.  It measures how strongly a within-block
 distribution responds to a forcing away from equilibrium.
 
-In the larger development, the intended result for any stationary distribution
-`pi` was the exact identity
+For any stationary distribution `pi`, the formalized result is the exact identity
 
 $$
 \boxed{
@@ -654,30 +653,36 @@ two deterministic positive steady states.
 
 ### Lean theorem source included and checked
 
-The current checkout machine-checks the core modules listed in
+The current checkout machine-checks the complete target listed in
 [`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md): frozen activator-target algebra,
 finite birth/death balance and path Poisson identities, processivity and dwell-time
-rescaling, slow/fast tracking and dwell averages, Ras peak geometry and Model 1/3
+rescaling, slow/fast tracking and dwell averages, the finite Ras generator and
+history filter, block/global Poisson identities, reverse Poisson and total
+variation results, the stationary-defect theorem, Ras peak geometry, Model 1/3
 rescaling, and reduced deterministic positive-equilibrium uniqueness.
 
-The build contains no `sorry`, `admit`, or `axiom` declarations in the retained
-source. It does **not** certify the absent stationary extension, the generated
-numerical reports, BNGL parser semantics, or biological truth.
+The build contains no `sorry`, `admit`, or `axiom` declarations in the Lean
+source. It does **not** freshly reproduce the generated numerical reports,
+formalize BNGL parser semantics, or establish biological truth. Four bridge
+modules were reconstructed according to the restoration bundle's provenance
+notes; compilation verifies their present implementation, not byte identity with
+unpreserved source.
 
 ---
 
 ## 18. How to verify it
 
-Locally, using the isolated Lean installation described in
-[`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md):
+Locally, with `elan` reading the pinned `lean-toolchain`:
 
 ```bash
 cd formalization
-ELAN_HOME=/private/tmp/bng3-elan-home \
-  /private/tmp/bng3-elan-home/bin/lake build
+lake build
 python test_math_identities.py
 python ras_quantization_analysis.py
 ```
+
+The verification recorded in [`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md) used
+an isolated Lean 4.31.0 installation at `/private/tmp/bng3-elan-home`.
 
 ---
 
@@ -702,10 +707,19 @@ formalization/
 │   ├── SlowFast.lean
 │   ├── Ras.lean
 │   ├── RasEquilibrium.lean
-│   ├── RasGlobalPoisson.lean        # preserved, unavailable dependency
-│   ├── RasSlowForward.lean          # preserved, unavailable dependency
-│   ├── RasReversePoisson.lean       # preserved, unavailable dependency
-│   └── RasFullStationary.lean       # preserved, unavailable dependency
+│   ├── HistoryFilter.lean
+│   ├── RasGenerator.lean
+│   ├── RasFastBlock.lean
+│   ├── RasStateSpace.lean
+│   ├── RasBlockPoisson.lean
+│   ├── RasGlobalCorrector.lean
+│   ├── RasGlobalPoisson.lean
+│   ├── RasSlowForward.lean
+│   ├── RasFiniteOperators.lean
+│   ├── FiniteTV.lean
+│   ├── StationaryMixture.lean
+│   ├── RasReversePoisson.lean
+│   └── RasFullStationary.lean
 │
 └── generated/
     ├── RAS_FORMAL_MATH_REPORT.md

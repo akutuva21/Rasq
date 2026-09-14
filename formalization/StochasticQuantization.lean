@@ -1,31 +1,31 @@
 import StochasticQuantization.Core
 import StochasticQuantization.BirthDeath
+import StochasticQuantization.BirthDeathPoisson
 import StochasticQuantization.Processivity
 import StochasticQuantization.SlowFast
+import StochasticQuantization.HistoryFilter
 import StochasticQuantization.Ras
 import StochasticQuantization.RasEquilibrium
+import StochasticQuantization.RasGenerator
+import StochasticQuantization.RasFastBlock
+import StochasticQuantization.RasStateSpace
+import StochasticQuantization.RasBlockPoisson
+import StochasticQuantization.RasGlobalCorrector
+import StochasticQuantization.RasGlobalPoisson
+import StochasticQuantization.RasSlowForward
+import StochasticQuantization.RasFiniteOperators
+import StochasticQuantization.FiniteTV
+import StochasticQuantization.StationaryMixture
+import StochasticQuantization.RasReversePoisson
+import StochasticQuantization.RasFullStationary
 
 noncomputable section
 
 /-!
 # StochasticQuantization
 
-A small Lean library for the mathematics behind processivity-driven stochastic
-quantization.  The focus is the finite stochastic slow/fast mechanism itself: how
-discrete catalyst occupancy, target relaxation, and catalyst residence time combine
-to create or erase quantized output states.
-
-The library proves algebraic statements used by the accompanying Ras analysis:
-
-* the exact frozen-occupancy target equilibrium;
-* exact conditional peak spacing and low-saturation error;
-* local detailed balance for the finite birth/death target chain;
-* how common scaling of binding/unbinding changes dwell time/processivity while
-  preserving equilibrium binding ratios;
-* a quantitative slow/fast tracking rule connecting Ras relaxation to the chance
-  that an SOS occupancy state survives long enough for Ras to follow it;
-* Ras-specific peak formulas, peak-crowding conditions, and the Model 1 -> Model 3
-  kinetic rescaling invariants.
-
-See `formalization/README.md` for the biological interpretation and proof status.
+Umbrella import for the complete finite-state Ras stochastic-quantization
+formalization.  This file intentionally imports the advanced slow/fast stationary
+chain as well as the smaller frozen-occupancy library so `lake build` checks the
+full dependency graph.
 -/

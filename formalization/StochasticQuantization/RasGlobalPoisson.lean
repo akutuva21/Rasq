@@ -52,8 +52,10 @@ theorem zeroMassForcing_eq_sub_project
       R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
       (extendFastVector b (x b)) m.1 =
       x b m - StateSpace.project p x b m := by
+  have hF : BlockPoisson.F R (boundGDP b) (boundGTP b) = freeTotal b := by
+    rfl
   unfold BlockPoisson.zeroMassForcing BlockPoisson.projectedPart
-  rw [totalOver_extendFastVector]
+  rw [hF, totalOver_extendFastVector]
   unfold StateSpace.project BlockProjection.project BlockProjection.blockMass
     StateSpace.rho BlockPoisson.rho
   rw [extendFastVector_apply]
@@ -97,30 +99,106 @@ theorem fastForward_corrector
     (hF : 0 < freeTotal b) :
     fastForward p (GlobalCorrector.corrector p x) b m =
       x b m - StateSpace.project p x b m := by
+  have hext :
+    extendFastVector b (GlobalCorrector.corrector p x b) =
+      extendFastVector b (fun m => BlockPoisson.corrector R (boundGDP b)
+          (boundGTP b) p.kcat1 p.kcat2 (extendFastVector b (x b)) m.1) := by
+    funext n
+    change (if h : n < freeTotal b + 1 then
+        GlobalCorrector.corrector p x b ⟨n, h⟩ else 0) =
+      (if h : n < freeTotal b + 1 then
+        BlockPoisson.corrector R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
+          (extendFastVector b (x b)) n else 0)
+    by_cases hn : n < freeTotal b + 1 <;>
+      simp [hn, GlobalCorrector.corrector]
+  have hblock : BlockPoisson.F R (boundGDP b) (boundGTP b) = freeTotal b := by
+    rfl
+  have hz (n : ℕ) (hn : n < freeTotal b + 1) :
+      extendFastVector b (fun m => BlockPoisson.corrector R (boundGDP b)
+        (boundGTP b) p.kcat1 p.kcat2 (extendFastVector b (x b)) m.1) n =
+        BlockPoisson.corrector R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
+          (extendFastVector b (x b)) n := by
+    change (if h : n < freeTotal b + 1 then
+        BlockPoisson.corrector R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
+          (extendFastVector b (x b)) n else 0) = _
+    simp [hn]
   unfold fastForward fastForwardNat
+  rw [hext]
   simp [ne_of_gt hF]
   by_cases h0 : m.1 = 0
-  · simp [h0]
+  · have hm0 : m = 0 := Fin.ext h0
+    simp [hm0]
+    have hlower :
+        lowerForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+            (BlockPoisson.deathFn p.kcat2)
+            (extendFastVector b (fun m => BlockPoisson.corrector R (boundGDP b)
+              (boundGTP b) p.kcat1 p.kcat2 (extendFastVector b (x b)) m.1)) =
+          lowerForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+            (BlockPoisson.deathFn p.kcat2)
+            (fun n => BlockPoisson.corrector R (boundGDP b) (boundGTP b)
+              p.kcat1 p.kcat2 (extendFastVector b (x b)) n) := by
+      unfold lowerForward
+      rw [hz 1 (by omega), hz 0 (by omega)]
+    rw [hlower]
     have h := BlockPoisson.corrector_lower
       R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
       (extendFastVector b (x b)) hkcat2 hF
     rw [h]
-    exact zeroMassForcing_eq_sub_project p x b m
-  · simp [h0]
+    simpa [hm0] using zeroMassForcing_eq_sub_project p x b m
+  ·
     by_cases htop : m.1 = freeTotal b
-    · simp [htop]
+    · have hm0ne : m ≠ 0 := by
+        intro hm0
+        apply h0
+        simpa [hm0]
+      simp [hm0ne, htop]
+      have hupper :
+          upperForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+              (BlockPoisson.deathFn p.kcat2)
+              (extendFastVector b (fun m => BlockPoisson.corrector R (boundGDP b)
+                (boundGTP b) p.kcat1 p.kcat2 (extendFastVector b (x b)) m.1))
+              (freeTotal b - 1) =
+            upperForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+              (BlockPoisson.deathFn p.kcat2)
+              (fun n => BlockPoisson.corrector R (boundGDP b) (boundGTP b)
+                p.kcat1 p.kcat2 (extendFastVector b (x b)) n)
+              (freeTotal b - 1) := by
+        unfold upperForward
+        rw [show freeTotal b - 1 + 1 = freeTotal b by omega]
+        rw [hz (freeTotal b - 1) (by omega), hz (freeTotal b) (by omega)]
+      rw [hupper]
       have h := BlockPoisson.corrector_upper
         R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
         (extendFastVector b (x b)) hkcat2 hF hden
+      rw [hblock] at h
       rw [h]
       simpa [htop] using zeroMassForcing_eq_sub_project p x b m
-    · simp [htop]
-      have hmle : m.1 ≤ freeTotal b := by omega
+    · have hm0ne : m ≠ 0 := by
+        intro hm0
+        apply h0
+        simpa [hm0]
+      simp [hm0ne, htop]
+      have hmle : m.1 ≤ freeTotal b := Nat.le_of_lt_succ m.2
       have hmlt : m.1 < freeTotal b := lt_of_le_of_ne hmle htop
       have hprev : m.1 - 1 + 1 = m.1 := by omega
+      have hinter :
+          interiorForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+              (BlockPoisson.deathFn p.kcat2)
+              (extendFastVector b (fun m => BlockPoisson.corrector R (boundGDP b)
+                (boundGTP b) p.kcat1 p.kcat2 (extendFastVector b (x b)) m.1))
+              (m.1 - 1) =
+            interiorForward (BlockPoisson.birthFn R (boundGDP b) (boundGTP b) p.kcat1)
+              (BlockPoisson.deathFn p.kcat2)
+              (fun n => BlockPoisson.corrector R (boundGDP b) (boundGTP b)
+                p.kcat1 p.kcat2 (extendFastVector b (x b)) n)
+              (m.1 - 1) := by
+        unfold interiorForward
+        rw [hz (m.1 - 1) (by omega), hz (m.1 - 1 + 2) (by omega),
+          hz (m.1 - 1 + 1) (by omega)]
+      rw [hinter]
       have hint := BlockPoisson.corrector_interior
         R (boundGDP b) (boundGTP b) (m.1 - 1) p.kcat1 p.kcat2
-        (extendFastVector b (x b)) hkcat2 (by omega)
+        (extendFastVector b (x b)) hkcat2 (by simpa [hblock, hprev] using hmlt)
       rw [hint]
       rw [hprev]
       exact zeroMassForcing_eq_sub_project p x b m
@@ -138,7 +216,8 @@ theorem fastForward_corrector_zeroFree
     fastForward p (GlobalCorrector.corrector p x) b m =
       x b m - StateSpace.project p x b m := by
   have hBF : BlockPoisson.F R (boundGDP b) (boundGTP b) = 0 := by
-    simpa [BlockPoisson.F, FastBlock.freePool, freeTotal, boundTotal] using hF
+    simpa [BlockPoisson.F, FastBlock.freePool, FastBlock.boundTotal,
+      freeTotal, StateSpace.boundTotal] using hF
   have hzero := BlockPoisson.zeroMassForcing_total_zero
     R (boundGDP b) (boundGTP b) p.kcat1 p.kcat2
     (extendFastVector b (x b)) hden

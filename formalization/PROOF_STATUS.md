@@ -1,10 +1,9 @@
 # Formalization status
 
 This file is deliberately conservative about what has and has not been verified.
-For the provenance and completeness boundary of this ZIP, see
-[`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md).  The table below describes only
-the source that is present and compiled in this checkout; older claims about a
-larger stationary-theorem extension are not claims about this archive.
+For the provenance boundary of the restored modules, see
+[`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md).  The table below describes the
+source present and compiled in this checkout.
 
 ## Included and kernel-checked by `lake build`
 
@@ -17,17 +16,18 @@ larger stationary-theorem extension are not claims about this archive.
 | One-dwell slow/fast tracking and exponential-dwell averages | `SlowFast.lean` |
 | Ras frozen peak/error/spacing and Model 1→3 rescaling | `Ras.lean` |
 | Reduced deterministic positive-equilibrium uniqueness | `RasEquilibrium.lean` |
+| Finite conserved Ras state space, history filter, and full generator | `RasStateSpace.lean`, `HistoryFilter.lean`, `RasGenerator.lean` |
+| Blockwise fast equilibrium and constructive O(F) corrector | `RasFastBlock.lean`, `RasBlockPoisson.lean`, `RasGlobalCorrector.lean` |
+| Global fast Poisson identity and slow/fast operators | `RasGlobalPoisson.lean`, `RasSlowForward.lean`, `RasFiniteOperators.lean` |
+| Reverse Poisson, TV identity/bound, and stationary defect | `RasReversePoisson.lean`, `FiniteTV.lean`, `StationaryMixture.lean`, `RasFullStationary.lean` |
 
 The verified library target is the explicit module list in `lakefile.toml`.
 
 ## Source referenced by older documentation but absent here
 
-The ZIP does not contain `HistoryFilter.lean`, `RasGenerator.lean`,
-`RasFastBlock.lean`, `RasStateSpace.lean`, `RasBlockPoisson.lean`,
-`RasGlobalCorrector.lean`, `RasFiniteOperators.lean`, `FiniteTV.lean`, or
-`StationaryMixture.lean`.  The four advanced files that import these modules are
-preserved but excluded from the default target.  In particular, the exact
-finite-state stationary-defect theorem is not machine-checked by this checkout.
+The attached restoration bundle adds the nine prerequisite modules that were
+absent from the original ZIP.  They are now included in the default target, and
+the exact finite-state stationary-defect theorem is machine-checked here.
 
 ## Executed numerical verification
 
@@ -58,8 +58,8 @@ toolchain using the isolated temporary `elan` installation described in
 `ARCHIVE_INTEGRITY.md`.  The retained source contains no `sorry`, `admit`, or
 `axiom` declarations.
 
-This does not certify the absent advanced modules or the generated numerical
-reports.  It also does not formalize BNGL parser semantics or biological truth.
+This does not freshly reproduce the generated numerical reports.  It also does
+not formalize BNGL parser semantics or biological truth.
 
 ## What is not formalized
 
