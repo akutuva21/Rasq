@@ -2,6 +2,8 @@ import Mathlib
 import StochasticQuantization.Core
 import StochasticQuantization.Processivity
 
+noncomputable section
+
 /-!
 # A quantitative slow/fast tracking rule
 
@@ -120,7 +122,6 @@ theorem surviveRelaxationWindow_eq_exp_neg_c_div_gamma
   unfold surviveRelaxationWindow exponentialDwellSurvival relaxationWindow gamma
   congr 1
   field_simp [hr, hkoff]
-  ring
 
 /-- The same physical ratio can be read as mean dwell time divided by target
 relaxation time. -/
@@ -129,7 +130,6 @@ theorem gamma_eq_dwell_div_relaxationTime
     gamma r koff = dwellTime koff / (1 / r) := by
   unfold gamma dwellTime
   field_simp [hr, hkoff]
-  ring
 
 /-- Speeding only the catalyst unbinding clock by `scale` divides `Gamma` by the
 same factor.  This captures the Model 1 -> Model 3 loss of persistence when target
@@ -139,7 +139,6 @@ theorem scaling_unbinding_divides_gamma
     gamma r (scale * koff) = gamma r koff / scale := by
   unfold gamma
   field_simp [hscale, hkoff]
-  ring
 
 /-- For the frozen activator-target model, the direct `gamma` definition agrees
 with the existing occupancy-specific `persistenceRatio`. -/
@@ -246,8 +245,9 @@ theorem meanResidualAtDwellEnd_eq
   rw [integral_exp_mul_Ioi (a := -(r + koff)) (by linarith) 0]
   simp
   have hsum : koff + r ≠ 0 := ne_of_gt (add_pos hkoff hr)
+  have hden : -koff + -r = -(koff + r) := by ring
+  rw [hden]
   field_simp [hsum]
-  ring
 
 /-- The average fraction of the conditional mean move completed before unbinding. -/
 def meanCompletedAtDwellEnd (r koff : ℝ) : ℝ :=

@@ -1,3 +1,12 @@
+import StochasticQuantization.Core
+import StochasticQuantization.BirthDeath
+import StochasticQuantization.Processivity
+import StochasticQuantization.SlowFast
+import StochasticQuantization.Ras
+import StochasticQuantization.RasEquilibrium
+
+noncomputable section
+
 /-!
 # StochasticQuantization
 
@@ -20,10 +29,3 @@ The library proves algebraic statements used by the accompanying Ras analysis:
 
 See `formalization/README.md` for the biological interpretation and proof status.
 -/
-
-import StochasticQuantization.Core
-import StochasticQuantization.BirthDeath
-import StochasticQuantization.Processivity
-import StochasticQuantization.SlowFast
-import StochasticQuantization.Ras
-import StochasticQuantization.RasEquilibrium

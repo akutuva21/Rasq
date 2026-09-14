@@ -1,5 +1,7 @@
 import Mathlib
 
+noncomputable section
+
 /-!
 # Deterministic steady-state uniqueness for the four-state Ras/SOS reduction
 

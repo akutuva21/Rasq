@@ -3,6 +3,12 @@
 This folder adds a standalone Lean 4 formalization and numerical certificate suite
 to the original Ras activation repository.
 
+> **Archive boundary.** This ZIP contains and builds the core formalization, but
+> it does not contain the later finite-state stationary-theorem modules described
+> in Sections 11–15 below. Those sections are retained as provenance for the
+> larger development, not as claims that this checkout can currently verify. See
+> [`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md) for the exact boundary.
+
 You do **not** need to know Lean or advanced probability to understand the point.
 The biological question is:
 
@@ -65,17 +71,17 @@ inactive <-- kOff ---- active
 
 The equilibrium chance that one target is active is
 
-\[
+$$
 p_n=\frac{n k_{Act}}{n k_{Act}+k_{Off}}.
-\]
+$$
 
 For `T` targets, the mean number active is
 
-\[
+$$
 \boxed{
 \mu_n=T\frac{n k_{Act}}{n k_{Act}+k_{Off}}
 }.
-\]
+$$
 
 This is not just a fitted peak location.  It follows from balancing activation and
 deactivation flux.
@@ -96,15 +102,15 @@ m -> m-1  at rate m*kOff
 This is a finite birth/death chain.  Its stationary probabilities are binomial.
 In unnormalized form,
 
-\[
+$$
 w_m={T\choose m}(n k_{Act})^m k_{Off}^{T-m}.
-\]
+$$
 
 After normalization,
 
-\[
+$$
 P(M=m)={T\choose m}p_n^m(1-p_n)^{T-m}.
-\]
+$$
 
 `BirthDeath.lean` proves detailed balance.  `RasFastBlock.lean` writes the closed
 binomial weights, normalization, detailed balance, and mean for the Ras
@@ -116,27 +122,27 @@ specialization.
 
 In the weak-activation limit,
 
-\[
+$$
 \mu_n\approx n\Delta,
 \qquad
 \Delta=\frac{T k_{Act}}{k_{Off}}.
-\]
+$$
 
 So the levels are approximately
 
-\[
+$$
 0,\Delta,2\Delta,3\Delta,\ldots
-\]
+$$
 
 But they are **not exactly equally spaced**.  The exact neighboring spacing is
 
-\[
+$$
 \boxed{
 \mu_{n+1}-\mu_n=
 \frac{T k_{Act}k_{Off}}
 {(n k_{Act}+k_{Off})((n+1)k_{Act}+k_{Off})}
 }.
-\]
+$$
 
 As activation saturates, those levels crowd together.
 
@@ -200,25 +206,25 @@ GTP cannot directly deactivate.
 
 Inside one fixed block, define
 
-\[
+$$
 B=boundGDP+boundGTP,
 \qquad
 F=RasTotal-B.
-\]
+$$
 
 The only moving coordinate is free RasGTP `m`:
 
-\[
+$$
 m\to m+1
 \quad\text{at rate}\quad
 (F-m)B k_{cat1},
-\]
+$$
 
-\[
+$$
 m\to m-1
 \quad\text{at rate}\quad
 m k_{cat2}.
-\]
+$$
 
 So every frozen Ras block is exactly a finite birth/death chain with a binomial
 equilibrium.
@@ -229,25 +235,25 @@ equilibrium.
 
 For total bound SOS count `B`, the mean free RasGTP in that frozen block is
 
-\[
+$$
 \boxed{
 \mu_B=(R_T-B)
 \frac{B k_{cat1}}{B k_{cat1}+k_{cat2}}
 }.
-\]
+$$
 
 The factor `R_T-B` appears because every Ras:SOS complex removes one Ras molecule
 from the free target pool.
 
 The exact spacing is
 
-\[
+$$
 \boxed{
 \mu_{B+1}-\mu_B=
 \frac{k_{cat1}[k_{cat2}(R_T-2B-1)-k_{cat1}B(B+1)]}
 {(Bk_{cat1}+k_{cat2})((B+1)k_{cat1}+k_{cat2})}
 }.
-\]
+$$
 
 The numerator shows two separate ways peaks crowd:
 
@@ -280,23 +286,23 @@ leaving `kcat1` and `kcat2` unchanged.
 
 Therefore:
 
-\[
-\frac{k_{on}'}{k_{off}'}=rac{k_{on}}{k_{off}},
-\]
+$$
+\frac{k_{on}'}{k_{off}'}=\frac{k_{on}}{k_{off}},
+$$
 
 so the simple binding ratio is preserved, but
 
-\[
+$$
 \tau_{dwell}'=\frac{\tau_{dwell}}{1000}.
-\]
+$$
 
 At the operator level the same fact is
 
-\[
+$$
 \boxed{
 Q_{Model3,\epsilon}=Q_{Model1,1000\epsilon}
 }
-\]
+$$
 
 for the same SOS concentration.
 
@@ -309,36 +315,36 @@ time needed to occupy them.
 
 If a temporary SOS state pushes Ras toward target `mu`, the mean relaxes as
 
-\[
+$$
 x(t)=\mu+(x_0-\mu)e^{-rt},
-\]
+$$
 
 with
 
-\[
+$$
 r=B k_{cat1}+k_{cat2}.
-\]
+$$
 
 Define
 
-\[
+$$
 \Gamma=\frac{r}{k_{off}^{SOS}}.
-\]
+$$
 
 Then an exponential SOS dwell survives for `c` Ras response times with probability
 
-\[
+$$
 \boxed{e^{-c/\Gamma}}.
-\]
+$$
 
 Averaging over all possible dwell lengths gives an intuitive quantity:
 
-\[
+$$
 \boxed{
 \text{mean fraction of the Ras move completed before unbinding}
 =\frac{\Gamma}{1+\Gamma}
 }.
-\]
+$$
 
 At one bound SOS:
 
@@ -362,37 +368,37 @@ frozen target.
 
 For one dwell write
 
-\[
+$$
 a=e^{-r\Delta t}.
-\]
+$$
 
 Then
 
-\[
+$$
 \boxed{x_{after}=a x_{before}+(1-a)\mu}.
-\]
+$$
 
 For two dwells,
 
-\[
+$$
 \boxed{
 x_{final}=a_1a_0x_{initial}
 +(1-a_1)\mu_1+a_1(1-a_0)\mu_0.
 }
-\]
+$$
 
 The older target `mu_0` is multiplied by the newer factor `a_1`, so newer events
 progressively erase older information.
 
 For any finite shared history, two initial conditions satisfy
 
-\[
+$$
 \boxed{
 x_{final}^{(1)}-x_{final}^{(2)}
 =\left(\prod_i a_i\right)
 (x_{initial}^{(1)}-x_{initial}^{(2)}).
 }
-\]
+$$
 
 That is a precise mathematical meaning of **fading biochemical memory**.
 
@@ -415,15 +421,19 @@ the saved occupancy samples.
 
 ---
 
-## 11. The exact stationary theorem
+## 11. The later exact stationary extension (not included in this ZIP)
+
+The following sections describe a later extension whose prerequisite Lean source
+files are absent from this archive. They are not part of the default `lake build`
+target and are not machine-checked here.
 
 Now consider the whole finite stochastic Ras count process.
 
 Write its forward generator as
 
-\[
+$$
 Q_\epsilon=Q_{fast}+\epsilon Q_{SOS}.
-\]
+$$
 
 `Q_fast` contains reactions 1–2.  `Q_SOS` contains reactions 3–6.  Changing
 `epsilon` speeds or slows **only** SOS block switching.
@@ -437,13 +447,14 @@ Define `P` as follows:
 Define `R` as the fast Poisson corrector.  It measures how strongly a within-block
 distribution responds to a forcing away from equilibrium.
 
-For any stationary distribution `pi`, the source proves the exact identity
+In the larger development, the intended result for any stationary distribution
+`pi` was the exact identity
 
-\[
+$$
 \boxed{
 \pi-P\pi=-\epsilon RQ_{SOS}\pi.
 }
-\]
+$$
 
 This is the key result.
 
@@ -457,7 +468,7 @@ This identity remains true even when the frozen-mixture approximation is bad.
 
 ---
 
-## 12. Why no giant matrix inverse is needed
+## 12. Why no giant matrix inverse was intended
 
 A naive proof might imagine inverting an enormous generator matrix.
 That is unnecessary.
@@ -482,28 +493,28 @@ starting at state 0.
 
 ---
 
-## 13. Why the reverse Poisson identity is legitimate
+## 13. Why the reverse Poisson identity was intended to be legitimate
 
 The constructive block solve directly gives
 
-\[
+$$
 Q_{fast}R=I-P.
-\]
+$$
 
 The stationary theorem needs
 
-\[
+$$
 RQ_{fast}=I-P.
-\]
+$$
 
 `RasReversePoisson.lean` derives the reverse order using finite-dimensional linear
 algebra.  The key trick is to define
 
-\[
+$$
 A=Q_{fast}+P,
 \qquad
 B=R+P.
-\]
+$$
 
 The already-proved block properties give `AB=I`.  On a finite-dimensional vector
 space, a one-sided inverse is also a two-sided inverse, so `BA=I`.  Expanding that
@@ -514,43 +525,47 @@ full stationary theorem.
 
 ---
 
-## 14. Total variation: the same metric as the numerical analysis
+## 14. Total variation: the intended extension
 
 For two finite probability distributions,
 
-\[
+$$
 TV(p,q)=\frac12\sum_s|p(s)-q(s)|.
-\]
+$$
 
 `FiniteTV.lean` defines this directly on the finite Ras state space.
 The stationary theorem becomes
 
-\[
+$$
 \boxed{
 TV(\pi,P\pi)
 =\frac{|\epsilon|}{2}\|RQ_{SOS}\pi\|_1.
 }
-\]
+$$
 
 If `R` and `Q_SOS` have L1 bounds `C_R` and `C_S`, then
 
-\[
+$$
 \boxed{
 TV(\pi,P\pi)\le
 \frac{|\epsilon|}{2}C_RC_S.
 }
-\]
+$$
 
 So the frozen-mixture approximation becomes first-order accurate as SOS switching
 is slowed:
 
-\[
+$$
 TV=O(\epsilon).
-\]
+$$
 
 ---
 
-## 15. Numerical certificate on the real 1000-Ras count model
+## 15. Recorded numerical certificate on the real 1000-Ras count model
+
+The tables in this section are retained generated data from the larger
+development. The corresponding CTMC script is not included in this ZIP, so these
+results have not been freshly reproduced by the current checkout.
 
 The symbolic Lean state space is **untruncated** for any fixed total Ras count.
 For numerical stationary solves only, `full_ras_ctmc_analysis.py` caps total bound
@@ -616,16 +631,16 @@ See `generated/FULL_RAS_CTMC_REPORT.md` for the full certificate.
 The stochastic mechanism above does not require deterministic bistability.
 For the reduced positive steady-state equations, define
 
-\[
+$$
 x=\frac{free\ RasGTP}{free\ RasGDP}.
-\]
+$$
 
 The steady-state relations reduce to
 
-\[
+$$
 A x^2+B x-C=0,
 \qquad A>0,\ C>0.
-\]
+$$
 
 Because the constant term is negative, such a quadratic has at most one positive
 root.  `RasEquilibrium.lean` proves this algebraically.
@@ -637,87 +652,32 @@ two deterministic positive steady states.
 
 ## 17. What is actually proved, and what is not?
 
-### Lean theorem source included
+### Lean theorem source included and checked
 
-The source now covers:
+The current checkout machine-checks the core modules listed in
+[`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md): frozen activator-target algebra,
+finite birth/death balance and path Poisson identities, processivity and dwell-time
+rescaling, slow/fast tracking and dwell averages, Ras peak geometry and Model 1/3
+rescaling, and reduced deterministic positive-equilibrium uniqueness.
 
-- frozen activation fraction, mean, variance formula ingredients, and spacing;
-- low-saturation approximation error;
-- finite birth/death detailed balance;
-- exact frozen Ras binomial weights, normalization, and mean;
-- processivity/residence-time rescaling;
-- one-dwell slow/fast tracking identities;
-- dwell-averaged progress before unbinding;
-- finite-history fading-memory identities;
-- exact six-reaction Ras count propensities;
-- full finite conserved-Ras state encoding;
-- coverage of conserved four-pool Ras states by that encoding;
-- exact frozen-equilibrium projector and `P^2=P`;
-- constructive O(F) block Poisson corrector;
-- global `Q_fast R=I-P`;
-- finite-dimensional derivation of `R Q_fast=I-P`;
-- exact finite SOS forward operator;
-- exact full generator `Q_fast + epsilon Q_SOS`;
-- exact Model 1/Model 3 1000x SOS-clock relation;
-- exact stationary defect identity;
-- exact total-variation identity and conditional O(epsilon) bound;
-- deterministic reduced positive-steady-state uniqueness.
-
-### Executed numerical checks
-
-The packaged Python code executes and checks:
-
-- 20,000 randomized algebra / slow-fast / history / detailed-balance identities;
-- formula application to the supplied SSA trajectories;
-- history-filter reconstruction;
-- exact 1000-Ras sparse CTMC stationary solves;
-- bound-SOS cap convergence;
-- the stationary Poisson-defect identity;
-- the native slow-clock scaling law;
-- Model 1 / Model 3 clock-rescaling equivalence.
-
-### Not claimed
-
-This does **not** prove that the Ras/SOS model is biologically correct.
-It proves statements *conditional on the model equations*.
-
-It also does not formalize the BNGL language/parser itself.  The six count
-transitions were manually mapped from the supplied BNGL rules and checked against
-the model semantics used in the numerical implementation.
-
-Most importantly, this environment still does not have a usable Lean toolchain,
-so I could not run the final kernel compilation here.  The `.lean` files contain
-no intentional `sorry` or `admit` placeholders, but until CI or an external machine
-runs `lake build`, the correct wording is:
-
-> **Lean theorem source, awaiting kernel compilation.**
-
-The repository includes a GitHub Actions workflow that runs the pinned Lean build,
-Lean's independent checker, the placeholder gate, and the numerical certificate
-suite when pushed.
+The build contains no `sorry`, `admit`, or `axiom` declarations in the retained
+source. It does **not** certify the absent stationary extension, the generated
+numerical reports, BNGL parser semantics, or biological truth.
 
 ---
 
 ## 18. How to verify it
 
-From the repository root, Lean CI lives at:
-
-```text
-.github/workflows/formalization.yml
-```
-
-Locally:
+Locally, using the isolated Lean installation described in
+[`ARCHIVE_INTEGRITY.md`](ARCHIVE_INTEGRITY.md):
 
 ```bash
 cd formalization
-lake exe cache get
-lake build
+ELAN_HOME=/private/tmp/bng3-elan-home \
+  /private/tmp/bng3-elan-home/bin/lake build
 python test_math_identities.py
 python ras_quantization_analysis.py
-python full_ras_ctmc_analysis.py
 ```
-
-The full CTMC script is the slowest numerical check.
 
 ---
 
@@ -726,13 +686,13 @@ The full CTMC script is the slowest numerical check.
 ```text
 formalization/
 ├── README.md
+├── ARCHIVE_INTEGRITY.md
 ├── PROOF_STATUS.md
 ├── lakefile.toml
 ├── lean-toolchain
 ├── StochasticQuantization.lean
 ├── test_math_identities.py
 ├── ras_quantization_analysis.py
-├── full_ras_ctmc_analysis.py
 │
 ├── StochasticQuantization/
 │   ├── Core.lean
@@ -740,21 +700,12 @@ formalization/
 │   ├── BirthDeathPoisson.lean
 │   ├── Processivity.lean
 │   ├── SlowFast.lean
-│   ├── HistoryFilter.lean
 │   ├── Ras.lean
 │   ├── RasEquilibrium.lean
-│   ├── RasGenerator.lean
-│   ├── RasFastBlock.lean
-│   ├── RasStateSpace.lean
-│   ├── RasBlockPoisson.lean
-│   ├── RasGlobalCorrector.lean
-│   ├── RasGlobalPoisson.lean
-│   ├── RasSlowForward.lean
-│   ├── RasFiniteOperators.lean
-│   ├── FiniteTV.lean
-│   ├── StationaryMixture.lean
-│   ├── RasReversePoisson.lean
-│   └── RasFullStationary.lean
+│   ├── RasGlobalPoisson.lean        # preserved, unavailable dependency
+│   ├── RasSlowForward.lean          # preserved, unavailable dependency
+│   ├── RasReversePoisson.lean       # preserved, unavailable dependency
+│   └── RasFullStationary.lean       # preserved, unavailable dependency
 │
 └── generated/
     ├── RAS_FORMAL_MATH_REPORT.md

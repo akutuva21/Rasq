@@ -1,6 +1,8 @@
 import Mathlib
 import StochasticQuantization.Core
 
+noncomputable section
+
 /-!
 # Finite stochastic target chain
 

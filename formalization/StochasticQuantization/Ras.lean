@@ -2,6 +2,8 @@ import Mathlib
 import StochasticQuantization.Core
 import StochasticQuantization.Processivity
 
+noncomputable section
+
 /-!
 # Application to the Ras/SOS models in this repository
 
@@ -36,7 +38,6 @@ structure Params where
   koffGDP : ℝ
   konGTP : ℝ
   koffGTP : ℝ
-  deriving Repr
 
 /-- Frozen-occupancy mean of *free* RasGTP in the reduced model. -/
 def freePeak (p : Params) (n : ℕ) : ℝ :=

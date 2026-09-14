@@ -8,4 +8,13 @@ rev = "v4.31.0"
 
 [[lean_lib]]
 name = "StochasticQuantization"
-globs = ["StochasticQuantization", "StochasticQuantization.+"]
+globs = [
+  "StochasticQuantization",
+  "StochasticQuantization.Core",
+  "StochasticQuantization.BirthDeath",
+  "StochasticQuantization.BirthDeathPoisson",
+  "StochasticQuantization.Processivity",
+  "StochasticQuantization.SlowFast",
+  "StochasticQuantization.Ras",
+  "StochasticQuantization.RasEquilibrium"
+]

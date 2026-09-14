@@ -1,5 +1,7 @@
 import Mathlib
 
+noncomputable section
+
 /-!
 # Core mathematics of a frozen-occupancy activator-target module
 

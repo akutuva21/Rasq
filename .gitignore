@@ -2,3 +2,4 @@ Model1/
 outputs/
 results_*/
 .DS_Store
+.lake/

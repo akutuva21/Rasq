@@ -1,6 +1,10 @@
 import Mathlib
 import StochasticQuantization.BirthDeath
 
+noncomputable section
+
+open scoped BigOperators
+
 /-!
 # Constructive Poisson solver for a finite birth/death chain
 
@@ -36,7 +40,7 @@ namespace BirthDeathPoisson
 
 /-- Cumulative forcing through state `m`. -/
 def prefixSum (y : ℕ → ℝ) (m : ℕ) : ℝ :=
-  ∑ i in Finset.range (m + 1), y i
+  ∑ i ∈ Finset.range (m + 1), y i
 
 @[simp] theorem prefixSum_zero (y : ℕ → ℝ) : prefixSum y 0 = y 0 := by
   simp [prefixSum]
@@ -143,7 +147,7 @@ theorem poissonRaw_upper
 
 /-- Total signed mass over states `0,...,T`. -/
 def totalOver (T : ℕ) (z : ℕ → ℝ) : ℝ :=
-  ∑ i in Finset.range (T + 1), z i
+  ∑ i ∈ Finset.range (T + 1), z i
 
 /-- Remove the stationary null-mode from a raw Poisson solution. -/
 def centered
@@ -155,11 +159,23 @@ theorem totalOver_centered
     (T : ℕ) (rho z : ℕ → ℝ)
     (hrho : totalOver T rho = 1) :
     totalOver T (centered T rho z) = 0 := by
-  unfold totalOver centered
-  rw [Finset.sum_sub_distrib]
-  rw [← Finset.mul_sum]
-  rw [hrho]
-  ring
+  have hsub (f g : ℕ → ℝ) :
+      totalOver T (fun i => f i - g i) = totalOver T f - totalOver T g := by
+    unfold totalOver
+    rw [Finset.sum_sub_distrib]
+  have hsmul (c : ℝ) (f : ℕ → ℝ) :
+      totalOver T (fun i => c * f i) = c * totalOver T f := by
+    unfold totalOver
+    rw [Finset.mul_sum]
+  calc
+    totalOver T (centered T rho z) =
+        totalOver T z - totalOver T (fun i => totalOver T z * rho i) := by
+      change totalOver T (fun i => z i - totalOver T z * rho i) =
+        totalOver T z - totalOver T (fun i => totalOver T z * rho i)
+      exact hsub z (fun i => totalOver T z * rho i)
+    _ = totalOver T z - totalOver T z * totalOver T rho := by
+      rw [hsmul]
+    _ = 0 := by rw [hrho]; ring
 
 /-- Subtracting any stationary zero-flux shape does not change edge fluxes. -/
 theorem edgeFlux_centered
@@ -200,7 +216,7 @@ theorem poissonRaw_add
       poissonRaw birth death y₁ m + poissonRaw birth death y₂ m := by
   intro m
   induction m with
-  | zero => rfl
+  | zero => simp [poissonRaw]
   | succ m ih =>
       simp only [poissonRaw, ih, prefixSum_add]
       ring

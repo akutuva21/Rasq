@@ -1,6 +1,8 @@
 import Mathlib
 import StochasticQuantization.Core
 
+noncomputable section
+
 /-!
 # Processivity and time-scale separation
 
@@ -50,7 +52,6 @@ theorem commonScaling_preserves_bindingRatio
     bindingRatio (scale * kon) (scale * koff) = bindingRatio kon koff := by
   unfold bindingRatio
   field_simp [hscale, hkoff]
-  ring
 
 /-- Common kinetic acceleration shortens dwell time by exactly the scale factor. -/
 theorem commonScaling_shortens_dwellTime
@@ -58,7 +59,6 @@ theorem commonScaling_shortens_dwellTime
     dwellTime (scale * koff) = dwellTime koff / scale := by
   unfold dwellTime
   field_simp [hscale, hkoff]
-  ring
 
 /-- If catalysis itself is not scaled, common binding/unbinding acceleration reduces
 `kcat/koff` by exactly the same factor. -/
@@ -68,7 +68,6 @@ theorem commonScaling_reduces_kineticPersistence
       kineticPersistenceFactor kcat koff / scale := by
   unfold kineticPersistenceFactor
   field_simp [hscale, hkoff]
-  ring
 
 /-- The substrate-aware processivity number is also reduced by the same factor if
 substrate abundance and catalysis are held fixed. -/
@@ -78,7 +77,6 @@ theorem commonScaling_reduces_processivityAtSubstrate
       processivityAtSubstrate substrate kcat koff / scale := by
   unfold processivityAtSubstrate
   field_simp [hscale, hkoff]
-  ring
 
 
 end StochasticQuantization
