@@ -1,0 +1,36 @@
+name: Lean theory checks
+
+on:
+  push:
+    paths:
+      - '**.lean'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+      - 'tools/**'
+      - '.github/workflows/lean.yml'
+  pull_request:
+    paths:
+      - '**.lean'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+      - 'tools/**'
+      - '.github/workflows/lean.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cheap structural pre-lint
+        run: python3 tools/prelint.py
+
+      - name: Numerical theorem smoke checks
+        run: python3 tools/check_theory_identities.py
+
+      - name: Build with pinned Lean and Mathlib
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true

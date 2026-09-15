@@ -29,5 +29,14 @@ globs = [
   "StochasticQuantization.FiniteTV",
   "StochasticQuantization.StationaryMixture",
   "StochasticQuantization.RasReversePoisson",
-  "StochasticQuantization.RasFullStationary"
+  "StochasticQuantization.RasFullStationary",
+  "StochasticQuantization.Theory",
+  "StochasticQuantization.Theory.FiniteMetric",
+  "StochasticQuantization.Theory.Decoder",
+  "StochasticQuantization.Theory.FastSwitching",
+  "StochasticQuantization.Theory.DwellDistribution",
+  "StochasticQuantization.Theory.Mesoscopic",
+  "StochasticQuantization.Theory.CatalyticLumping",
+  "StochasticQuantization.Theory.Accessibility",
+  "StochasticQuantization.RasTheory"
 ]
