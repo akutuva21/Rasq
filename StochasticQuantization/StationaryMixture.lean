@@ -45,10 +45,12 @@ theorem tv_from_defect
     (h : (fun b m => pi b m - Ppi b m) =
       (fun b m => -epsilon * corr b m)) :
     tv pi Ppi = (|epsilon| / 2) * l1 corr := by
-  unfold tv
+  unfold tv Theory.FiniteMetric.tv Theory.FiniteMetric.distanceL1
   rw [h]
-  rw [l1_smul]
+  rw [Theory.FiniteMetric.l1_smul]
   rw [abs_neg]
+  change (1 / 2 : ℝ) * (|epsilon| * Theory.FiniteMetric.l1 corr) =
+    |epsilon| / 2 * Theory.FiniteMetric.l1 corr
   ring
 
 /-- L1 operator-bound version used to obtain an explicit `O(epsilon)` TV bound. -/

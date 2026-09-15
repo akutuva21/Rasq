@@ -18,6 +18,8 @@ import StochasticQuantization.FiniteTV
 import StochasticQuantization.StationaryMixture
 import StochasticQuantization.RasReversePoisson
 import StochasticQuantization.RasFullStationary
+import StochasticQuantization.Theory
+import StochasticQuantization.RasTheory
 
 noncomputable section
 
